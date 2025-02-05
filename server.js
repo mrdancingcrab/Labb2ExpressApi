@@ -1,5 +1,5 @@
 const express = require("express");
-const fetch = require("node-fetch");
+const cors = require("cors");
 const app = express();
 
 
@@ -7,14 +7,15 @@ const port = 3000;
 
 // Middleware
 app.use(express.json());
+app.use(cors());
 
 //Temporary placeholder
-const NET_API_URL = "http://localhost:5206";
+const NET_API_URL = "http://localhost:5013";
 
 
 app.get("/fetch-from-dotnet", async (req, res) => {
     try{
-        const response = await globalThis.fetch(`${NET_API_URL}/players`);
+        const response = await fetch(`${NET_API_URL}/players`);
         const data = await response.json();
         res.json(data);
     } catch (error) {
@@ -26,16 +27,16 @@ app.post("/add-to-dotnet", async (req, res) => {
     try {
         const newData = req.body;
 
-        // ✅ Debugging: Log request data
+        // Log request data
         console.log("Received data from frontend:", newData);
 
-        if (!newData || !newData.name || !newData.type) {
-            return res.status(400).json({ error: "Missing required fields: name and type" });
+        if (!newData.firstName || !newData.lastName || !newData.position || !newData.club) {
+            return res.status(400).json({ error: "Missing required fields" });
         }
 
         console.log("Sending data to .NET API:", newData); 
 
-        const response = await fetch(`${NET_API_URL}/players`, {
+        const response = await fetch(`${NET_API_URL}/player`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+        }
+        button {
+            margin-top: 10px;
+            cursor: pointer;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>API Documentation UI</h2>
+        
+        <h3>Fetch Players</h3>
+        <button onclick="fetchPlayers()">Fetch Data</button>
+        <pre id="fetchResult">Response will appear here...</pre>
+        
+        <h3>Add Player</h3>
+        <textarea id="playerData" placeholder='{"firstName": "Tobias", "lastName": "Jäderberg", "country": "Sweden", "position": "Striker", "club": "Arsenal FC"}'></textarea>
+        <button onclick="addPlayer()">Send Data</button>
+        <pre id="postResult">Response will appear here...</pre>
+    </div>
+    
+    <script>
+        const API_URL = "http://localhost:3000";
+
+        async function fetchPlayers() {
+            try {
+                const res = await fetch(`${API_URL}/fetch-from-dotnet`);
+                if (!res.ok) throw new Error("Failed to fetch players");
+                const data = await res.json();
+                document.getElementById("fetchResult").textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById("fetchResult").textContent = "Error: " + error.message;
+            }
+        }
+
+        async function addPlayer() {
+            const inputData = document.getElementById("playerData").value;
+            try {
+                const parsedData = JSON.parse(inputData);
+                const res = await fetch(`${API_URL}/add-to-dotnet`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(parsedData)
+                });
+                if (!res.ok) throw new Error("Failed to add player");
+                const result = await res.json();
+                document.getElementById("postResult").textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                document.getElementById("postResult").textContent = "Error: " + error.message;
+            }
+        }
+    </script>
+</body>
+</html>
