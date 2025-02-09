@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(cors());
 
 //Temporary placeholder
-const NET_API_URL = "http://localhost:5013";
+const NET_API_URL = "http://localhost:5010";
 
 
 app.get("/fetch-from-dotnet", async (req, res) => {
