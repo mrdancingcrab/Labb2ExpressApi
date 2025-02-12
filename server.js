@@ -9,11 +9,10 @@ const port = 3000;
 app.use(express.json());
 app.use(cors());
 
-//Temporary placeholder
-const NET_API_URL = "http://localhost:5010";
+const NET_API_URL = "https://labb2api.azurewebsites.net";
 
 
-app.get("/fetch-from-dotnet", async (req, res) => {
+app.get("/get-players", async (req, res) => {
     try{
         const response = await fetch(`${NET_API_URL}/players`);
         const data = await response.json();
@@ -23,18 +22,13 @@ app.get("/fetch-from-dotnet", async (req, res) => {
     }
 });
 
-app.post("/add-to-dotnet", async (req, res) => {
+app.post("/add-player", async (req, res) => {
     try {
         const newData = req.body;
 
-        // Log request data
-        console.log("Received data from frontend:", newData);
-
-        if (!newData.firstName || !newData.lastName || !newData.position || !newData.club) {
+        if (!newData.firstName || !newData.lastName || !newData.position || !newData.club || !newData.country) {
             return res.status(400).json({ error: "Missing required fields" });
         }
-
-        console.log("Sending data to .NET API:", newData); 
 
         const response = await fetch(`${NET_API_URL}/player`, {
             method: "POST",
@@ -45,11 +39,9 @@ app.post("/add-to-dotnet", async (req, res) => {
         });
 
         const result = await response.json();
-        console.log("Response from .NET API:", result); // Debugging response
         res.json({ message: "Data sent successfully", response: result });
 
     } catch (error) {
-        console.error("Error sending data to .NET API:", error); // Log any errors
         res.status(500).json({ error: "Failed to send data to .NET API" });
     }
 });

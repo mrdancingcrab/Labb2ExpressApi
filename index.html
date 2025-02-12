@@ -48,7 +48,7 @@
 
         async function fetchPlayers() {
             try {
-                const res = await fetch(`${API_URL}/fetch-from-dotnet`);
+                const res = await fetch(`${API_URL}/get-players`);
                 if (!res.ok) throw new Error("Failed to fetch players");
                 const data = await res.json();
                 document.getElementById("fetchResult").textContent = JSON.stringify(data, null, 2);
@@ -61,7 +61,7 @@
             const inputData = document.getElementById("playerData").value;
             try {
                 const parsedData = JSON.parse(inputData);
-                const res = await fetch(`${API_URL}/add-to-dotnet`, {
+                const res = await fetch(`${API_URL}/add-player`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(parsedData)
