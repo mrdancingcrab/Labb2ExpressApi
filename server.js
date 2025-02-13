@@ -12,7 +12,7 @@ app.use(cors());
 const NET_API_URL = "https://labb2api.azurewebsites.net";
 
 
-app.get("/get-players", async (req, res) => {
+app.get("/players", async (req, res) => {
     try{
         const response = await fetch(`${NET_API_URL}/players`);
         const data = await response.json();
@@ -22,7 +22,7 @@ app.get("/get-players", async (req, res) => {
     }
 });
 
-app.post("/add-player", async (req, res) => {
+app.post("/player", async (req, res) => {
     try {
         const newData = req.body;
 
